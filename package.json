@@ -1,0 +1,35 @@
+{
+    "name": "phiclicker",
+    "version": "0.0.1",
+    "author": "Kevin Wang <klwang3@illinois.edu>",
+    "contributors": [
+        {
+            "name": "Matthew Hyder",
+            "email": "mlhyder2@illinois.edu"
+        },
+        {
+            "name": "Austin Chung",
+            "email": "achung13@illinois.edu"
+        }
+    ],
+    "scripts": {
+        "start": "gulp"
+    },
+    "dependencies": {
+        "express": "4.13.x",
+        "jade": "1.11.x",
+        "react": "0.14.x",
+        "react-dom": "0.14.x",
+        "socket.io": "1.3.x"
+    },
+    "browserify": {
+        "transform": ["babelify"]
+    },
+    "devDependencies": {
+        "babelify": "6.3.x",
+        "browserify": "11.2.x",
+        "gulp": "3.9.x",
+        "gulp-nodemon": "2.0.x",
+        "vinyl-source-stream": "1.1.x"
+    }
+}
