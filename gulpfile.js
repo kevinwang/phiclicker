@@ -5,36 +5,41 @@ var gulp = require('gulp');
 var nodemon = require('gulp-nodemon');
 var source = require('vinyl-source-stream');
 
-gulp.task('javascript', function(){
-    var destDir = 'public/js';
-    var packages = [
-        'remote'
-    ];
+// JavaScript packages located in javascript directory
+var packages = [
+    'remote-package'
+];
 
-    var bundleThis = function(srcArray) {
-        srcArray.forEach(function(src) {
-            console.log('Bundling javascript/' + src + '-package -> public/js/' + src + '.js');
-            var b = browserify({
-                entries: 'javascript/' + src + '-package/index.js',
-                debug: true
-            });
-            b.bundle()
-            .pipe(source(src + '.js'))
-            .pipe(gulp.dest(destDir));
+// Create a task for each package
+packages.forEach(function(pkg) {
+    gulp.task(pkg, function(){
+        console.log('Bundling javascript/' + pkg + ' -> public/js/' + pkg + '.js');
+        var b = browserify({
+            entries: 'javascript/' + pkg + '/index.js',
+            debug: true
         });
-    };
-
-    bundleThis(packages);
-});
-
-gulp.task('watchjs', function() {
-    gulp.watch('javascript/**/*', ['javascript']);
-});
-
-gulp.task('server', function() {
-    nodemon({
-        script: 'app.js'
+        b.bundle()
+        .pipe(source(pkg + '.js'))
+        .pipe(gulp.dest('public/js'));
     });
 });
 
-gulp.task('default', ['watchjs', 'server']);
+// Automatically rebuild packages when source files are modified
+gulp.task('watchjs', function() {
+    packages.forEach(function(pkg) {
+        gulp.watch('javascript/' + pkg + '/*', [pkg]);
+    });
+});
+
+// Build all JavaScript packages
+gulp.task('build', packages);
+
+// Run backend
+gulp.task('server', function() {
+    nodemon({
+        script: 'app.js',
+        ignore: ['javascript', 'public']
+    });
+});
+
+gulp.task('default', ['watchjs', 'server'].concat(packages));
