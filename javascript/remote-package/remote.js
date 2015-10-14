@@ -1,4 +1,3 @@
-var React = require('react');
 var socket = require('socket.io-client')();
 
 /**

@@ -7,6 +7,7 @@ var source = require('vinyl-source-stream');
 
 // JavaScript packages located in javascript directory
 var packages = [
+    'react-package',
     'remote-package'
 ];
 
