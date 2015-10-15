@@ -1,4 +1,4 @@
-var Remote = require('./remote.js');
+var Remote = require('./remote');
 
 ReactDOM.render(
     <Remote classId={1} />,
