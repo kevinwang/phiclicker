@@ -7,12 +7,15 @@ CS 411 group project: real-time audience response system, but for free.
 - Austin Chung <achung13@illinois.edu>
 
 ## Dev instructions
+First, install MySQL.
+
 ```bash
+echo "CREATE DATABASE phiclicker;" | mysql
 npm install
 npm start
 ```
 
-Server and client-side JavaScript packages will restart/rebuild automatically when source files are modified.
+The server will start at [http://localhost:3000/](http://localhost:3000/). Server and client-side JavaScript packages will restart/rebuild automatically when source files are modified.
 
 ## JavaScript packages
 We will organize our client-side JS into packages, each of which bundle into a single `.js` file. To create a new JavaScript package, create a new directory `javascript/*-package` and create an `index.js` underneath it. Add the package to the `packages` array near the top of `gulpfile.js`.

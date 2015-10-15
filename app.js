@@ -6,7 +6,8 @@ app.use('/static', express.static('public'));
 var server = require('http').Server(app);
 var io = require('socket.io')(server);
 
-server.listen(3000);
+var config = require('./config');
+var db = require('./models');
 
 var results = {'A': 0, 'B': 0, 'C': 0, 'D': 0, 'E': 0};
 
@@ -36,4 +37,12 @@ io.on('connection', function(socket) {
     socket.on('disconnect', function() {
         console.log('user disconnected');
     });
+});
+
+db.sequelize.sync()
+.then(function(err) {
+    server.listen(config.port);
+})
+.catch(function(err) {
+    throw err[0];
 });
