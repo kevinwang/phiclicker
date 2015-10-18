@@ -10,6 +10,12 @@ module.exports = function(sequelize, DataTypes) {
             type: DataTypes.STRING,
             allowNull: false
         }
+    }, {
+        classMethods: {
+            associate: function(models) {
+                User.belongsToMany(models.Course, {through: 'Registrations'});
+            }
+        }
     });
     return User;
 };
