@@ -1,7 +1,7 @@
 module.exports = function(sequelize, DataTypes) {
     var Response = sequelize.define('Response', {
-        UserId: {
-            type: DataTypes.INTEGER,
+        UserUsername: {
+            type: DataTypes.STRING,
             primaryKey: true
         },
         QuestionId: {
