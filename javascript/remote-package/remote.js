@@ -1,4 +1,6 @@
-var socket = require('socket.io-client')();
+var socket=require('socket.io-client')();
+
+var MultipleChoice = require('./multiple-choice');
 
 /**
  * Interface for students to submit responses.
@@ -6,6 +8,19 @@ var socket = require('socket.io-client')();
 var Remote = React.createClass({
     propTypes: {
         classId: React.PropTypes.number.isRequired
+    },
+
+    getInitialState: function() {
+        return {
+            question: 'How many chucks can a wood chuck chuck?',
+            questionType: 'mc',
+            questionData: [
+                'Aravind is a fuckboi',
+                'Nexus of cheating',
+                'Sunbathing with my doggie',
+                'Lorem Ipsum'
+            ]
+        };
     },
 
     componentWillMount: function() {
@@ -18,17 +33,32 @@ var Remote = React.createClass({
         });
     },
 
-    handleButtonPress: function(e) {
-        socket.emit('answer', e.currentTarget.value);
+    getAnswerInputMethod: function() {
+        switch (this.state.questionType) {
+            case 'mc':
+                return <MultipleChoice
+                    choices={this.state.questionData}
+                    handleSubmit={this.handleSubmit} />;
+        }
+    },
+
+    handleSubmit: function(value) {
+        switch (this.state.questionType) {
+            case 'mc':
+                console.log(value);
+                socket.emit('answer', value);
+                break;
+        }
     },
 
     render: function() {
-        return <div>
-            <button value="A" onClick={this.handleButtonPress}>A</button>
-            <button value="B" onClick={this.handleButtonPress}>B</button>
-            <button value="C" onClick={this.handleButtonPress}>C</button>
-            <button value="D" onClick={this.handleButtonPress}>D</button>
-            <button value="E" onClick={this.handleButtonPress}>E</button>
+        return <div classNameName="stack">
+            <div className="bound">
+                <div id="question">
+                    <h2>{this.state.question}</h2>
+                </div>
+                {this.getAnswerInputMethod()}
+            </div>
         </div>;
     }
 });
