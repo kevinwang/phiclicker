@@ -23,6 +23,8 @@ app.use(bodyParser.urlencoded({extended: true}));
 app.use(passport.initialize());
 app.use(passport.session());
 
+var routes = require('./routes');
+routes(app);
 
 var server = require('http').Server(app);
 var io = require('socket.io')(server);
@@ -55,31 +57,6 @@ io.on('connection', function(socket) {
     socket.on('disconnect', function() {
         console.log('user disconnected');
     });
-});
-
-app.get('/login', function(req, res) {
-    if (req.isAuthenticated()) return res.redirect('/home');
-    res.render('login');
-});
-
-app.post('/login', passport.authenticate('login', {
-    successRedirect: '/',
-    failureRedirect: '/login'
-}));
-
-app.get('/signup', function(req, res) {
-    if (req.isAuthenticated()) return res.redirect('/');
-    res.render('signup');
-});
-
-app.post('/signup', passport.authenticate('signup', {
-    successRedirect: '/',
-    failureRedirect: '/signup'
-}));
-
-app.get('/logout', function(req, res) {
-    req.logout();
-    res.redirect('/');
 });
 
 db.sequelize.sync()
