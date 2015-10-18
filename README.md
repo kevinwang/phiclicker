@@ -7,7 +7,7 @@ CS 411 group project: real-time audience response system, but for free.
 - Austin Chung <achung13@illinois.edu>
 
 ## Dev instructions
-First, install MySQL.
+First, install MySQL and Redis.
 
 ```bash
 echo "CREATE DATABASE phiclicker;" | mysql

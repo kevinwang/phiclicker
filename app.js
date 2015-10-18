@@ -1,13 +1,31 @@
+var config = require('./config');
+var db = require('./models');
+
+var NODE_ENV = process.env.NODE_ENV || 'development';
+
+var passport = require('./authentication');
+var session = require('express-session');
+var RedisStore = require('connect-redis')(session);
+
 var express = require('express');
+var bodyParser = require('body-parser');
 var app = express();
+
 app.set('view engine', 'jade');
 app.use('/static', express.static('public'));
+app.use(session({
+    store: new RedisStore(config.redis[NODE_ENV]),
+    secret: config.sessionSecret,
+    resave: false,
+    saveUninitialized: false
+}));
+app.use(bodyParser.urlencoded({extended: true}));
+app.use(passport.initialize());
+app.use(passport.session());
+
 
 var server = require('http').Server(app);
 var io = require('socket.io')(server);
-
-var config = require('./config');
-var db = require('./models');
 
 var results = {'A': 0, 'B': 0, 'C': 0, 'D': 0, 'E': 0};
 
@@ -37,6 +55,31 @@ io.on('connection', function(socket) {
     socket.on('disconnect', function() {
         console.log('user disconnected');
     });
+});
+
+app.get('/login', function(req, res) {
+    if (req.isAuthenticated()) return res.redirect('/home');
+    res.render('login');
+});
+
+app.post('/login', passport.authenticate('login', {
+    successRedirect: '/',
+    failureRedirect: '/login'
+}));
+
+app.get('/signup', function(req, res) {
+    if (req.isAuthenticated()) return res.redirect('/');
+    res.render('signup');
+});
+
+app.post('/signup', passport.authenticate('signup', {
+    successRedirect: '/',
+    failureRedirect: '/signup'
+}));
+
+app.get('/logout', function(req, res) {
+    req.logout();
+    res.redirect('/');
 });
 
 db.sequelize.sync()

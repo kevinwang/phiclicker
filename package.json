@@ -16,9 +16,15 @@
         "start": "gulp"
     },
     "dependencies": {
+        "bcrypt": "0.8.x",
+        "body-parser": "1.14.x",
+        "connect-redis": "3.0.x",
         "express": "4.13.x",
+        "express-session": "1.11.x",
         "jade": "1.11.x",
         "mysql": "2.9.x",
+        "passport": "0.3.x",
+        "passport-local": "1.0.x",
         "react": "0.14.x",
         "react-dom": "0.14.x",
         "sequelize": "3.12.x",
