@@ -31,10 +31,6 @@ var io = require('socket.io')(server);
 
 var results = {'A': 0, 'B': 0, 'C': 0, 'D': 0, 'E': 0};
 
-app.get('/', function(req, res) {
-    res.render('index');
-});
-
 io.on('connection', function(socket) {
     console.log('a user connected');
 
@@ -59,8 +55,9 @@ io.on('connection', function(socket) {
     });
 });
 
-db.sequelize.sync()
+db.sequelize.sync({force: true})
 .then(function(err) {
+    require('./seed-db')();
     server.listen(config.port);
 })
 .catch(function(err) {

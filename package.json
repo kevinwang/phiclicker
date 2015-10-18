@@ -16,6 +16,7 @@
         "start": "gulp"
     },
     "dependencies": {
+        "async": "1.4.x",
         "bcrypt": "0.8.x",
         "body-parser": "1.14.x",
         "connect-redis": "3.0.x",

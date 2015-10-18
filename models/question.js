@@ -12,6 +12,7 @@ module.exports = function(sequelize, DataTypes) {
         classMethods: {
             associate: function(models) {
                 Question.belongsTo(models.Course);
+                Question.hasOne(models.MultipleChoice);
             }
         }
     });
