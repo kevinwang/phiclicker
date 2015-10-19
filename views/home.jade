@@ -6,7 +6,8 @@ block content
     h1 Courses you teach
     ul
       each course in coursesTaught
-        li= course.name
+        li
+          a(href='/course/' + course.id)= course.name
 
   if coursesTaken.length > 0
     h1 Courses you are taking

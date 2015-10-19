@@ -52,6 +52,7 @@ io.on('connection', function(socket) {
             })
             .spread(function(questions, metadata) {
                 var question = questions[0];
+                if (!question) return socket.emit('disable');
                 socket.emit('set question', {
                     text: question.text,
                     type: question.type,

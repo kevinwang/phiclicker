@@ -1,0 +1,11 @@
+extends ./layout.jade
+
+block content
+  h1= course.name
+  h2 #{course.code} - #{course.section}
+  h3 Questions
+  if questions.length > 0
+    ul
+      each question in questions
+        li= question.text
+    a(href='/course/' + course.id + '/question/new') New question
