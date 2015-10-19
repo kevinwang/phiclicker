@@ -4,7 +4,7 @@ var db = require('./models');
 /**
  * Seed the database with test data.
  */
-module.exports = function() {
+var seedDB = module.exports = function() {
     bcrypt.hash('password', 10, function(err, hash) {
         db.User.create({
             username: 'kevin',
@@ -25,6 +25,16 @@ module.exports = function() {
                     })
                     .then(function(matthew) {
                         matthew.addRegisteredCourse(course);
+                    });
+                });
+
+                bcrypt.hash('password', 10, function(err, hash) {
+                    db.User.create({
+                        username: 'austin',
+                        password: hash
+                    })
+                    .then(function(austin) {
+                        austin.addRegisteredCourse(course);
                     });
                 });
 
@@ -66,3 +76,8 @@ module.exports = function() {
         });
     });
 }
+
+db.sequelize.sync({force: true})
+.then(function(err) {
+    seedDB();
+})

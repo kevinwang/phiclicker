@@ -12,6 +12,7 @@ First, install MySQL and Redis.
 ```bash
 echo "CREATE DATABASE phiclicker;" | mysql
 npm install
+node seed-db.js
 npm start
 ```
 
