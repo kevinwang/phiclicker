@@ -8,7 +8,7 @@ config.db = {
         host: 'localhost',
         database: 'phiclicker',
         username: 'root',
-        password: 'A716867c!',
+        password: '',
         logging: console.log
     },
     production: {
