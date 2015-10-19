@@ -1,34 +1,85 @@
-var socket = require('socket.io-client')();
+var socket=require('socket.io-client')();
+
+var MultipleChoice = require('./multiple-choice');
 
 /**
  * Interface for students to submit responses.
  */
 var Remote = React.createClass({
     propTypes: {
-        classId: React.PropTypes.number.isRequired
+        courseId: React.PropTypes.number.isRequired,
+        username: React.PropTypes.string.isRequired
+    },
+
+    getInitialState: function() {
+        return {
+            questionText: '',
+            questionType: 'disabled',
+            mc: [],
+            value: ''
+        };
     },
 
     componentWillMount: function() {
         socket.on('connect', function() {
-            socket.emit('initialize', this.props.classId);
+            socket.emit('initialize', {
+                username: this.props.username,
+                courseId: this.props.courseId
+            });
         }.bind(this));
 
-        socket.on('update counts', function(counts) {
-            console.log(counts);
+        socket.on('set question', function(question) {
+            this.setState({
+                questionText: question.text,
+                questionType: question.type,
+                mc: question.mc,
+                value: question.value
+            });
+        }.bind(this));
+
+        socket.on('update value', function(value) {
+            this.setState({
+                value: value
+            });
+        }.bind(this));
+
+        socket.on('disable', function() {
+            this.setState({
+                questionType: 'disabled'
+            });
+        }.bind(this));
+    },
+
+    getAnswerInputMethod: function() {
+        switch (this.state.questionType) {
+            case 'mc':
+                return <MultipleChoice
+                    choices={this.state.mc}
+                    value={this.state.value}
+                    handleSubmit={this.handleSubmit} />;
+            case 'disabled':
+            default:
+                return null;
+        }
+    },
+
+    handleSubmit: function(value) {
+        socket.emit('response', {
+            username: this.props.username,
+            value: value
         });
     },
 
-    handleButtonPress: function(e) {
-        socket.emit('answer', e.currentTarget.value);
-    },
-
     render: function() {
-        return <div>
-            <button value="A" onClick={this.handleButtonPress}>A</button>
-            <button value="B" onClick={this.handleButtonPress}>B</button>
-            <button value="C" onClick={this.handleButtonPress}>C</button>
-            <button value="D" onClick={this.handleButtonPress}>D</button>
-            <button value="E" onClick={this.handleButtonPress}>E</button>
+        var questionText = (this.state.questionType === 'disabled' ?
+                        'No active question' : this.state.questionText);
+        return <div classNameName="stack">
+            <div className="bound">
+                <div id="question">
+                    <h2>{questionText}</h2>
+                </div>
+                {this.getAnswerInputMethod()}
+            </div>
         </div>;
     }
 });

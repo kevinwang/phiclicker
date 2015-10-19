@@ -1,0 +1,99 @@
+body{
+  margin: 0px;
+  padding: 0px;
+  border: 0px;
+  background-color: #2E3D4C;
+
+}
+.stack{
+  width: 100%;
+
+}
+.navbar{
+  width: 20%;
+  max-width: 200px;
+  background-color: #2E3D4C;
+  height: 100%;
+  display: inline-block;
+  float: left;
+
+}
+ 
+.bound{
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 512px;
+    display: inline-block;
+    float: left;
+    background-color:#99CCFF;
+    box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.26);
+    height: 530px;
+
+}
+
+.box{
+  float:left;
+  display: inline-block;
+  height: 50px;
+  width: 50px;
+  text-align: center;
+  color: white;
+  margin-right: 2px;
+  background-color: #0066CC;
+  padding: 5px;
+  font-family: "Century Gothic", "Calibri", Sans-serif;
+  cursor: pointer;
+
+}
+
+.textChoice{
+  float:left;
+  display: inline;
+  background-color: #0066CC;
+  width: 400px;
+  color: white;
+  font-family: "Century Gothic", "Calibri", Sans-serif;
+  height: 50px;
+  padding-left: 15px;
+  padding-right: 15px;
+  padding-bottom: 5px;
+  padding-top: 5px;
+  cursor: pointer;
+}
+
+.choice{
+  position: relative;
+  display: inline-block;
+  width: 100%;
+  height: 50px;
+  margin: 10px;
+}
+
+.choice.selected > .textChoice,
+.choice.selected > .box{
+  background-color: OliveDrab;
+}
+
+.choice:hover > .textChoice,
+.choice:hover > .box{
+  box-shadow: inset 0 0 100px 100px rgba(255, 255, 255, 0.1);
+}
+
+#question{
+  position: relative;
+  display: inline-block;
+  background-color: #0066CC;
+  color: white;
+  font-family: "Century Gothic", "Calibri", Sans-serif;
+  height: 30%;
+  width: 482px;
+  padding-left: 15px;
+  padding-right: 15px;
+  padding-bottom: 5px;
+  padding-top: 5px;
+  background-image: url("/static/images/q.png");
+  background-size: 30%;
+  background-repeat: no-repeat;
+}

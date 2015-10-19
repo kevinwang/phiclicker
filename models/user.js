@@ -3,12 +3,19 @@ module.exports = function(sequelize, DataTypes) {
         username: {
             type: DataTypes.STRING,
             allowNull: false,
-            unique: true,
+            primaryKey: true,
             validate: {isAlphanumeric: true}
         },
         password: {
             type: DataTypes.STRING,
             allowNull: false
+        }
+    }, {
+        classMethods: {
+            associate: function(models) {
+                User.belongsToMany(models.Course, {as: 'RegisteredCourse', through: 'Registrations', onDelete: 'CASCADE'});
+                User.belongsToMany(models.Course, {as: 'InstructedCourse', through: 'Instructors', onDelete: 'CASCADE'});
+            }
         }
     });
     return User;

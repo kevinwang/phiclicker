@@ -20,4 +20,13 @@ config.db = {
     }
 };
 
+config.redis = {
+    development: {
+        host: 'localhost'
+    },
+    production: {
+        host: 'localhost'
+    }
+};
+
 module.exports = config;

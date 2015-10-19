@@ -1,6 +1,1 @@
-var Remote = require('./remote');
-
-ReactDOM.render(
-    <Remote classId={1} />,
-    document.getElementById('remote')
-);
+window.Remote = require('./remote');
