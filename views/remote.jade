@@ -6,3 +6,5 @@ block head
 block content
   div(id='remote')
   script(src='/static/js/remote-package.js')
+  script.
+    ReactDOM.render(React.createElement(Remote, {courseId: #{id}, username: '#{username}'}), document.getElementById('remote'));

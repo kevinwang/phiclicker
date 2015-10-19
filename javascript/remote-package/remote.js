@@ -7,55 +7,64 @@ var MultipleChoice = require('./multiple-choice');
  */
 var Remote = React.createClass({
     propTypes: {
-        classId: React.PropTypes.number.isRequired
+        courseId: React.PropTypes.number.isRequired,
+        username: React.PropTypes.string.isRequired
     },
 
     getInitialState: function() {
         return {
-            question: 'How many chucks can a wood chuck chuck?',
-            questionType: 'mc',
-            questionData: [
-                'Aravind is a fuckboi',
-                'Nexus of cheating',
-                'Sunbathing with my doggie',
-                'Lorem Ipsum'
-            ]
+            questionText: '',
+            questionType: 'disabled',
+            mc: []
         };
     },
 
     componentWillMount: function() {
         socket.on('connect', function() {
-            socket.emit('initialize', this.props.classId);
+            socket.emit('initialize', this.props.courseId);
         }.bind(this));
 
-        socket.on('update counts', function(counts) {
-            console.log(counts);
-        });
+        socket.on('set question', function(question) {
+            this.setState({
+                questionText: question.text,
+                questionType: question.type,
+                mc: question.mc
+            });
+        }.bind(this));
+
+        socket.on('disable', function() {
+            this.setState({
+                questionType: 'disabled'
+            });
+        }.bind(this));
     },
 
     getAnswerInputMethod: function() {
         switch (this.state.questionType) {
             case 'mc':
                 return <MultipleChoice
-                    choices={this.state.questionData}
+                    choices={this.state.mc}
                     handleSubmit={this.handleSubmit} />;
+            case 'disabled':
+            default:
+                return null;
         }
     },
 
     handleSubmit: function(value) {
-        switch (this.state.questionType) {
-            case 'mc':
-                console.log(value);
-                socket.emit('answer', value);
-                break;
-        }
+        socket.emit('response', {
+            username: this.props.username,
+            value: value
+        });
     },
 
     render: function() {
+        var questionText = (this.state.questionType === 'disabled' ?
+                        'No active question' : this.state.questionText);
         return <div classNameName="stack">
             <div className="bound">
                 <div id="question">
-                    <h2>{this.state.question}</h2>
+                    <h2>{questionText}</h2>
                 </div>
                 {this.getAnswerInputMethod()}
             </div>

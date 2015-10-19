@@ -7,6 +7,8 @@ var passport = require('./authentication');
 var session = require('express-session');
 var RedisStore = require('connect-redis')(session);
 
+var redis = require('redis').createClient(config.redis[NODE_ENV]);
+
 var express = require('express');
 var bodyParser = require('body-parser');
 var app = express();
@@ -29,25 +31,53 @@ routes(app);
 var server = require('http').Server(app);
 var io = require('socket.io')(server);
 
-var results = {'A': 0, 'B': 0, 'C': 0, 'D': 0, 'E': 0};
-
 io.on('connection', function(socket) {
     console.log('a user connected');
 
-    function updateClients(classId) {
-        io.to(classId).emit('update counts', results);
-    }
+    socket.on('initialize', function(courseId) {
+        socket.join(courseId);
+        redis.get('active-question:' + courseId, function(err, questionId) {
+            console.log('active-question:' + courseId + ': ' + questionId);
 
-    socket.on('initialize', function(classId) {
-        socket.join(classId);
-        socket.emit('update counts', results);
+            if (questionId === null) return socket.emit('disable');
+
+            var query = (
+                'SELECT * FROM Questions LEFT JOIN MultipleChoices ' +
+                'ON Questions.id = MultipleChoices.QuestionId ' +
+                'WHERE Questions.id = ? '
+            );
+            db.sequelize.query(query, {
+                replacements: [questionId]
+            })
+            .spread(function(questions, metadata) {
+                var question = questions[0];
+                socket.emit('set question', {
+                    text: question.text,
+                    type: question.type,
+                    mc: [question.aText, question.bText, question.cText, question.dText, question.eText]
+                });
+            });
+        });
     });
 
-    socket.on('answer', function(value) {
-        var classId = socket.rooms[1];
-        console.log('Answer submitted: classId=' + classId + ' value=' + value);
-        results[value]++;
-        updateClients(classId);
+    socket.on('response', function(payload) {
+        var courseId = socket.rooms[1];
+        console.log('Answer submitted: courseId=' + courseId + ' payload=' + JSON.stringify(payload));
+        var now = new Date();
+        redis.get('active-question:' + courseId, function(err, questionId) {
+            var query = (
+                'INSERT INTO Responses ' +
+                '(UserUsername, QuestionId, value, createdAt, updatedAt) ' +
+                'VALUES (?, ?, ?, ?, ?) ' +
+                'ON DUPLICATE KEY UPDATE value = ?, updatedAt = ?'
+            );
+            db.sequelize.query(query, {
+                replacements: [
+                    payload.username, questionId, payload.value, now, now,
+                    payload.value, now
+                ]
+            });
+        });
     });
 
     socket.on('disconnect', function() {
@@ -55,9 +85,10 @@ io.on('connection', function(socket) {
     });
 });
 
-db.sequelize.sync({force: true})
+db.sequelize.sync()
+//db.sequelize.sync({force: true})
 .then(function(err) {
-    require('./seed-db')();
+    //require('./seed-db')();
     server.listen(config.port);
 })
 .catch(function(err) {

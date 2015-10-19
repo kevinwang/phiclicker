@@ -9,6 +9,7 @@ var MultipleChoice = React.createClass({
 
     render: function() {
         var choices = this.props.choices.map(function(choice, index) {
+            if (!choice) return null;
             var letter = String.fromCharCode(65 + index); // A, B, C, ...
             return <div
                 className="choice"
