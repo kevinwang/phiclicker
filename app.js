@@ -44,12 +44,11 @@ io.on('connection', function(socket) {
             var query = (
                 'SELECT * FROM Questions q ' +
                 'LEFT JOIN MultipleChoices mc ON q.id = mc.QuestionId ' +
-                'LEFT JOIN Responses r ON q.id = r.QuestionId ' +
-                'WHERE q.id = ? ' +
-                'AND r.UserUsername = ?'
+                'LEFT JOIN Responses r ON q.id = r.QuestionId AND r.UserUsername = ? ' +
+                'WHERE q.id = ?'
             );
             db.sequelize.query(query, {
-                replacements: [questionId, payload.username]
+                replacements: [payload.username, questionId]
             })
             .spread(function(questions, metadata) {
                 var question = questions[0];
