@@ -94,7 +94,7 @@ io.on('connection', function(socket) {
 db.sequelize.sync()
 //db.sequelize.sync({force: true})
 .then(function(err) {
-    //require('./seed-db')();
+    require('./seed-db')();
     server.listen(config.port);
 })
 .catch(function(err) {

@@ -2,6 +2,11 @@ body{
   margin: 0px;
   padding: 0px;
   border: 0px;
+  font-family: "Century Gothic", "Calibri", Sans-serif;
+  background-color: #2E3D4C;
+}
+
+.indexBody{
   background-color: #2E3D4C;
 
 }
@@ -9,16 +14,8 @@ body{
   width: 100%;
 
 }
-.navbar{
-  width: 20%;
-  max-width: 200px;
-  background-color: #2E3D4C;
-  height: 100%;
-  display: inline-block;
-  float: left;
 
-}
- 
+
 .bound{
     position: absolute;
     top: 50%;
@@ -54,7 +51,6 @@ body{
   background-color: #0066CC;
   width: 400px;
   color: white;
-  font-family: "Century Gothic", "Calibri", Sans-serif;
   height: 50px;
   padding-left: 15px;
   padding-right: 15px;
@@ -86,7 +82,6 @@ body{
   display: inline-block;
   background-color: #0066CC;
   color: white;
-  font-family: "Century Gothic", "Calibri", Sans-serif;
   height: 30%;
   width: 482px;
   padding-left: 15px;
@@ -96,4 +91,117 @@ body{
   background-image: url("/static/images/q.png");
   background-size: 30%;
   background-repeat: no-repeat;
+}
+
+/* HOME.JADE STYLES*/
+
+
+a{
+text-decoration: none;
+color: white;
+font-weight: normal;
+
+}
+.dashboard{
+  height: 100%;
+  width: 100%;
+  display: inline-block;
+  background-color: #2E3D4C;
+
+}
+
+.homeBody{
+  width: 100%;
+  height: 100%;
+  background-color: #2E3D4C;
+  color: white;
+
+}
+
+.logout{
+  margin-right: 20px;
+  float: right;
+  line-height: 50px;
+
+
+}
+
+.navBar{
+  z-index: -1;
+  margin: auto;
+  margin-bottom: 10px;
+  width: 100%;
+  height: 50px;
+  background-color: #99CCFF;
+  box-shadow: 0 6px 4px #333;
+}
+
+.roster{
+  margin-top: 50px;
+  background-color: #2d5f9a;
+  height: 70%;
+  width: 75%;
+  margin: auto;
+
+}
+
+.roster > ul{
+
+  list-style: none;
+  background-color: #2d5f9a;
+  margin: 0px;
+
+}
+
+.rosterHeader{
+  background-color: #003366;
+  padding: 5px;
+  padding-left: 20px;
+
+  box-shadow: 0 2px 2px #333;
+  margin-top: 50px;
+}
+ul {
+
+  width: 90%;
+ background: #292929;
+ color: white;
+ list-style: none;
+ padding-left: 0;
+}
+
+li {
+  margin-top: 6px;
+  width: 103.5%;
+ padding: 10px;
+ padding-left: 30px;
+ border-bottom: 1px solid #3c3c3c;
+
+}
+
+li:hover{
+  background-color:#3977c1;
+}
+
+.login{
+  margin: auto;
+  margin-top: 100px;
+  width: 15%;
+}
+.questionHeader{
+  margin-left: 30px;
+}
+
+.newQuestion{
+  float: right;
+  margin: 10px;
+}
+
+.delete{
+  float: right;
+}
+
+.makeQuestion{
+  width: 135px;
+  margin: auto;
 }

@@ -1,12 +1,24 @@
 extends ./layout.jade
 
+
+
 block content
-  h1= course.name
-  h2 #{course.code} - #{course.section}
-  h3 Questions
-  if questions.length > 0
-    ul
-      each question in questions
-        li= question.text
-          a(href='/course/' + course.id + '/question/' + question.id + '/delete') Delete
-  a(href='/course/' + course.id + '/question/new') New question
+  .homeBody
+    .navBar
+      .logout
+        a(href='/logout') Logout
+    .dashboard
+      .roster
+        .rosterHeader
+          h1= course.name
+          h2 #{course.code} - #{course.section}
+        .questionHeader
+          h3 Questions
+        if questions.length > 0
+          ul
+            each question in questions
+              li= question.text
+                .delete
+                  a(href='/course/' + course.id + '/question/' + question.id + '/delete') Delete
+        .newQuestion
+          a(href='/course/' + course.id + '/question/new') New question
