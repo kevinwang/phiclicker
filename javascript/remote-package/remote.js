@@ -22,7 +22,7 @@ var Remote = React.createClass({
 
     componentWillMount: function() {
         socket.on('connect', function() {
-            socket.emit('initialize', {
+            socket.emit('request question', {
                 username: this.props.username,
                 courseId: this.props.courseId
             });
@@ -40,6 +40,13 @@ var Remote = React.createClass({
         socket.on('update value', function(value) {
             this.setState({
                 value: value
+            });
+        }.bind(this));
+
+        socket.on('question change', function() {
+            socket.emit('request question', {
+                username: this.props.username,
+                courseId: this.props.courseId
             });
         }.bind(this));
 

@@ -8,6 +8,7 @@ var session = require('express-session');
 var RedisStore = require('connect-redis')(session);
 
 var redis = require('redis').createClient(config.redis[NODE_ENV]);
+var subscriber = require('redis').createClient(config.redis[NODE_ENV]);
 
 var express = require('express');
 var bodyParser = require('body-parser');
@@ -34,7 +35,7 @@ var io = require('socket.io')(server);
 io.on('connection', function(socket) {
     console.log('a user connected');
 
-    socket.on('initialize', function(payload) {
+    socket.on('request question', function(payload) {
         socket.join(payload.courseId);
         redis.get('active-question:' + payload.courseId, function(err, questionId) {
             console.log('active-question:' + payload.courseId + ': ' + questionId);
@@ -90,6 +91,18 @@ io.on('connection', function(socket) {
         console.log('user disconnected');
     });
 });
+
+subscriber.on('message', function(channel, key) {
+    var result = /active-question:(\d+)/.exec(key);
+    if (result) {
+        var courseId = parseInt(result[1]);
+        console.log(courseId);
+        io.to(courseId).emit('question change');
+    }
+});
+
+subscriber.subscribe('__keyevent@0__:set');
+subscriber.subscribe('__keyevent@0__:del');
 
 db.sequelize.sync()
 //db.sequelize.sync({force: true})
