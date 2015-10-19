@@ -1,17 +1,25 @@
 extends ./layout.jade
 
 block content
-  a(href='/logout') Logout
-  if coursesTaught.length > 0
-    h1 Courses you teach
-    ul
-      each course in coursesTaught
-        li
-          a(href='/course/' + course.id)= course.name
+  .homeBody
+    .navBar
+      .logout
+        a(href='/logout') Logout
+    .dashboard
+      if coursesTaught.length > 0
+        .roster
+          .rosterHeader
+            h1 Courses you teach
+          ul
+            each course in coursesTaught
+              li
+                a(href='/course/' + course.id)= course.name
 
-  if coursesTaken.length > 0
-    h1 Courses you are taking
-    ul
-      each course in coursesTaken
-        li
-          a(href='/remote/' + course.id)= course.name
+      if coursesTaken.length > 0
+        .roster
+          .rosterHeader
+            h1 Current Courses
+          ul
+            each course in coursesTaken
+              li
+                a(href='/remote/' + course.id)= course.name
