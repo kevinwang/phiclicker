@@ -1,4 +1,5 @@
 node_modules
 public/js
+config.js
 *.swp
 .DS_Store
