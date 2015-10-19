@@ -15,20 +15,31 @@ var Remote = React.createClass({
         return {
             questionText: '',
             questionType: 'disabled',
-            mc: []
+            mc: [],
+            value: ''
         };
     },
 
     componentWillMount: function() {
         socket.on('connect', function() {
-            socket.emit('initialize', this.props.courseId);
+            socket.emit('initialize', {
+                username: this.props.username,
+                courseId: this.props.courseId
+            });
         }.bind(this));
 
         socket.on('set question', function(question) {
             this.setState({
                 questionText: question.text,
                 questionType: question.type,
-                mc: question.mc
+                mc: question.mc,
+                value: question.value
+            });
+        }.bind(this));
+
+        socket.on('update value', function(value) {
+            this.setState({
+                value: value
             });
         }.bind(this));
 
@@ -44,6 +55,7 @@ var Remote = React.createClass({
             case 'mc':
                 return <MultipleChoice
                     choices={this.state.mc}
+                    value={this.state.value}
                     handleSubmit={this.handleSubmit} />;
             case 'disabled':
             default:

@@ -34,27 +34,30 @@ var io = require('socket.io')(server);
 io.on('connection', function(socket) {
     console.log('a user connected');
 
-    socket.on('initialize', function(courseId) {
-        socket.join(courseId);
-        redis.get('active-question:' + courseId, function(err, questionId) {
-            console.log('active-question:' + courseId + ': ' + questionId);
+    socket.on('initialize', function(payload) {
+        socket.join(payload.courseId);
+        redis.get('active-question:' + payload.courseId, function(err, questionId) {
+            console.log('active-question:' + payload.courseId + ': ' + questionId);
 
             if (questionId === null) return socket.emit('disable');
 
             var query = (
-                'SELECT * FROM Questions LEFT JOIN MultipleChoices ' +
-                'ON Questions.id = MultipleChoices.QuestionId ' +
-                'WHERE Questions.id = ? '
+                'SELECT * FROM Questions q ' +
+                'LEFT JOIN MultipleChoices mc ON q.id = mc.QuestionId ' +
+                'LEFT JOIN Responses r ON q.id = r.QuestionId ' +
+                'WHERE q.id = ? ' +
+                'AND r.UserUsername = ?'
             );
             db.sequelize.query(query, {
-                replacements: [questionId]
+                replacements: [questionId, payload.username]
             })
             .spread(function(questions, metadata) {
                 var question = questions[0];
                 socket.emit('set question', {
                     text: question.text,
                     type: question.type,
-                    mc: [question.aText, question.bText, question.cText, question.dText, question.eText]
+                    mc: [question.aText, question.bText, question.cText, question.dText, question.eText],
+                    value: question.value
                 });
             });
         });
@@ -76,6 +79,9 @@ io.on('connection', function(socket) {
                     payload.username, questionId, payload.value, now, now,
                     payload.value, now
                 ]
+            })
+            .then(function() {
+                socket.emit('update value', payload.value);
             });
         });
     });
