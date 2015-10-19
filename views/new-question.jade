@@ -1,18 +1,31 @@
 extends ./layout.jade
 
+
+
+
+
+
 block content
-  h1 New Question
-  form(name='question', action='/course/' + courseId + '/question', method='post')
-    label(for='text') Text
-    input(type='text', class='form-control', name='text', autofocus)
-    label(for='aText') A
-    input(type='text', class='form-control', name='aText')
-    label(for='bText') B
-    input(type='text', class='form-control', name='bText')
-    label(for='cText') C
-    input(type='text', class='form-control', name='cText')
-    label(for='dText') D
-    input(type='text', class='form-control', name='dText')
-    label(for='eText') E
-    input(type='text', class='form-control', name='eText')
-    input(type='submit', class='btn btn-default', value='Submit')
+  .homeBody
+    .navBar
+      .logout
+        a(href='/logout') Logout
+    .dashboard
+      .roster
+        .rosterHeader
+          h1 New Question
+        .makeQuestion
+          form(name='question', action='/course/' + courseId + '/question', method='post')
+            label(for='text') Question Text
+            input(type='text', class='form-control', name='text', autofocus)
+            label(for='aText') A
+            input(type='text', class='form-control', name='aText')
+            label(for='bText') B
+            input(type='text', class='form-control', name='bText')
+            label(for='cText') C
+            input(type='text', class='form-control', name='cText')
+            label(for='dText') D
+            input(type='text', class='form-control', name='dText')
+            label(for='eText') E
+            input(type='text', class='form-control', name='eText')
+            input(type='submit', class='btn btn-default', value='Submit')
