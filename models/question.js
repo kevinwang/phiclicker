@@ -11,8 +11,8 @@ module.exports = function(sequelize, DataTypes) {
     }, {
         classMethods: {
             associate: function(models) {
-                Question.belongsTo(models.Course);
-                Question.hasOne(models.MultipleChoice);
+                Question.belongsTo(models.Course, {onDelete: 'CASCADE'});
+                Question.hasOne(models.MultipleChoice, {onDelete: 'CASCADE'});
             }
         }
     });

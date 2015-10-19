@@ -13,8 +13,8 @@ module.exports = function(sequelize, DataTypes) {
     }, {
         classMethods: {
             associate: function(models) {
-                User.belongsToMany(models.Course, {as: 'RegisteredCourse', through: 'Registrations'});
-                User.belongsToMany(models.Course, {as: 'InstructedCourse', through: 'Instructors'});
+                User.belongsToMany(models.Course, {as: 'RegisteredCourse', through: 'Registrations', onDelete: 'CASCADE'});
+                User.belongsToMany(models.Course, {as: 'InstructedCourse', through: 'Instructors', onDelete: 'CASCADE'});
             }
         }
     });

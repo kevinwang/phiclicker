@@ -15,8 +15,8 @@ module.exports = function(sequelize, DataTypes) {
     }, {
         classMethods: {
             associate: function(models) {
-                Response.belongsTo(models.User);
-                Response.belongsTo(models.Question);
+                Response.belongsTo(models.User, {onDelete: 'CASCADE'});
+                Response.belongsTo(models.Question, {onDelete: 'CASCADE'});
             }
         }
     });

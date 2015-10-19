@@ -8,7 +8,7 @@ module.exports = function(sequelize, DataTypes) {
     }, {
         classMethods: {
             associate: function(models) {
-                MultipleChoice.belongsTo(models.Question);
+                MultipleChoice.belongsTo(models.Question, {onDelete: 'CASCADE'});
             }
         }
     });

@@ -13,11 +13,17 @@ module.exports = function(app) {
             replacements: [req.params.id, req.user.username]
         })
         .spread(function(results, metadata) {
-            var course = results[0];
-            if (!course) return res.redirect('/');
-            var questions = results.map(function(row) {
-                return {id: row.id, text: row.text};
-            });
+            if (results.length === 0) return res.redirect('/');
+            var course = {
+                id: results[0].CourseId,
+                name: results[0].name,
+                code: results[0].code,
+                section: results[0].section
+            };
+            console.log(results);
+            var questions = results[0].text ? results.map(function(row) {
+                return {id: row.id, text: row.text}
+            }) : [];
             console.log(questions);
             res.render('course', {
                 course: course,
@@ -27,12 +33,14 @@ module.exports = function(app) {
     });
 
     app.get('/course/:id/question/new', function(req, res) {
+        if (!req.isAuthenticated()) return res.redirect('/login');
         res.render('new-question', {
             courseId: req.params.id
         });
     });
 
     app.post('/course/:id/question', function(req, res) {
+        if (!req.isAuthenticated()) return res.redirect('/login');
         var now = new Date();
         var query = (
             'INSERT INTO Questions (text, type, createdAt, updatedAt, CourseId) ' +
@@ -57,6 +65,17 @@ module.exports = function(app) {
             .then(function() {
                 res.redirect('/course/' + req.params.id);
             });
+        });
+    });
+
+    app.get('/course/:courseId/question/:questionId/delete', function(req, res) {
+        if (!req.isAuthenticated()) return res.redirect('/login');
+        var query = 'DELETE FROM Questions WHERE id = ? AND Questions.CourseId = ?';
+        db.sequelize.query(query, {
+            replacements: [req.params.questionId, req.params.courseId]
+        })
+        .then(function() {
+            res.redirect('/course/' + req.params.courseId);
         });
     });
 };

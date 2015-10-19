@@ -8,4 +8,5 @@ block content
     ul
       each question in questions
         li= question.text
-    a(href='/course/' + course.id + '/question/new') New question
+          a(href='/course/' + course.id + '/question/' + question.id + '/delete') Delete
+  a(href='/course/' + course.id + '/question/new') New question
