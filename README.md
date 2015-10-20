@@ -11,6 +11,7 @@ First, install MySQL and Redis.
 
 ```bash
 echo "CREATE DATABASE phiclicker;" | mysql
+redis-cli config set notify-keyspace-events KEA
 npm install
 node seed-db.js
 npm start
