@@ -9,6 +9,7 @@ config.db = {
         database: 'phiclicker',
         username: 'root',
         password: null,
+        socketPath: null,
         logging: console.log
     },
     production: {
@@ -16,6 +17,7 @@ config.db = {
         database: 'phiclicker',
         username: 'root',
         password: null,
+        socketPath: null,
         logging: false
     }
 };
