@@ -7,11 +7,10 @@ CS 411 group project: real-time audience response system, but for free.
 - Austin Chung <achung13@illinois.edu>
 
 ## Dev instructions
-First, install MySQL and Redis.
+First, install MySQL and Redis. Add `notify-keyspace-events KEA` to `redis.conf`.
 
 ```bash
 echo "CREATE DATABASE phiclicker;" | mysql
-redis-cli config set notify-keyspace-events KEA
 npm install
 node seed-db.js
 npm start
