@@ -32,7 +32,9 @@ routes(app);
 var server = require('http').Server(app);
 var io = require('socket.io')(server);
 
-io.on('connection', function(socket) {
+remoteNsp = io.of('/remote');
+
+remoteNsp.on('connection', function(socket) {
     console.log('a user connected');
 
     socket.on('request question', function(payload) {
@@ -97,7 +99,7 @@ subscriber.on('message', function(channel, key) {
     if (result) {
         var courseId = parseInt(result[1]);
         console.log(courseId);
-        io.to(courseId).emit('question change');
+        remoteNsp.to(courseId).emit('question change');
     }
 });
 

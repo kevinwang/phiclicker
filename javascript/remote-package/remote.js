@@ -1,4 +1,4 @@
-var socket=require('socket.io-client')();
+var socket = require('socket.io-client')(':3000/remote');
 
 var MultipleChoice = require('./multiple-choice');
 
