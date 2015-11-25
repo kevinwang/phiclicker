@@ -78,4 +78,35 @@ module.exports = function(app) {
             res.redirect('/course/' + req.params.courseId);
         });
     });
+
+    app.get('/course/:id/panel', function(req, res) {
+        if (!req.isAuthenticated()) return res.redirect('/login');
+        var query = (
+            'SELECT * FROM Courses ' +
+            'LEFT JOIN Questions ON Courses.id = Questions.CourseId ' +
+            'JOIN Instructors ON Courses.id = Instructors.CourseId ' +
+            'WHERE Courses.id = ? AND Instructors.UserUsername = ?'
+        );
+        db.sequelize.query(query, {
+            replacements: [req.params.id, req.user.username]
+        })
+        .spread(function(results, metadata) {
+            if (results.length === 0) return res.redirect('/');
+            var course = {
+                id: results[0].CourseId,
+                name: results[0].name,
+                code: results[0].code,
+                section: results[0].section
+            };
+            console.log(results);
+            var questions = results[0].text ? results.map(function(row) {
+                return {id: row.id, text: row.text}
+            }) : [];
+            console.log(questions);
+            res.render('instructor-panel', {
+                course: course,
+                questions: questions
+            });
+        });
+    });
 };

@@ -12,6 +12,8 @@ block content
         .rosterHeader
           h1= course.name
           h2 #{course.code} - #{course.section}
+          h3
+            a(href='/course/' + course.id + '/panel') Open Instructor Panel
         .questionHeader
           h3 Questions
         if questions.length > 0

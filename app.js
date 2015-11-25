@@ -33,14 +33,13 @@ var server = require('http').Server(app);
 var io = require('socket.io')(server);
 
 remoteNsp = io.of('/remote');
-
 remoteNsp.on('connection', function(socket) {
-    console.log('a user connected');
+    console.log('a student connected');
 
     socket.on('request question', function(payload) {
         socket.join(payload.courseId);
         redis.get('active-question:' + payload.courseId, function(err, questionId) {
-            console.log('active-question:' + payload.courseId + ': ' + questionId);
+            console.log('get active-question:' + payload.courseId + ': ' + questionId);
 
             if (questionId === null) return socket.emit('disable');
 
@@ -85,12 +84,67 @@ remoteNsp.on('connection', function(socket) {
             })
             .then(function() {
                 socket.emit('update value', payload.value);
+                var query = (
+                    'SELECT value, COUNT(*) AS count FROM Responses ' +
+                    'WHERE QuestionId = ? GROUP BY value'
+                );
+                db.sequelize.query(query, {
+                    replacements: [questionId]
+                })
+                .spread(function(counts, metadata) {
+                    payload = {};
+                    counts.forEach(function(count) {
+                        payload[count.value] = count.count;
+                    });
+                    console.log(payload);
+                    instructorNsp.to(courseId).emit('update counts', payload);
+                });
             });
         });
     });
 
     socket.on('disconnect', function() {
         console.log('user disconnected');
+    });
+});
+
+instructorNsp = io.of('/instructor');
+instructorNsp.on('connection', function(socket) {
+    console.log('an instructor connected');
+
+    socket.on('initialize', function(courseId) {
+        socket.join(courseId);
+        redis.get('active-question:' + courseId, function(err, questionId) {
+            socket.emit('active question', questionId);
+        });
+    });
+
+    socket.on('get counts', function(questionId) {
+        var query = (
+            'SELECT value, COUNT(*) AS count FROM Responses ' +
+            'WHERE QuestionId = ? GROUP BY value'
+        );
+        db.sequelize.query(query, {
+            replacements: [questionId]
+        })
+        .spread(function(counts, metadata) {
+            payload = {};
+            counts.forEach(function(count) {
+                payload[count.value] = count.count;
+            });
+            console.log(payload);
+            socket.emit('update counts', payload);
+        });
+    });
+
+    socket.on('set active question', function(questionId) {
+        var courseId = socket.rooms[1];
+        redis.set('active-question:' + courseId, questionId);
+    });
+
+    socket.on('disable', function() {
+        var courseId = socket.rooms[1];
+        redis.del('active-question:' + courseId);
     });
 });
 
