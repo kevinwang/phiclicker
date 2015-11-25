@@ -1,10 +1,10 @@
 extends ./layout.jade
 
 block head
-  script(src='/static/js/react-package.js')
+  script(src='/js/react-package.js')
 
 block content
   div(id='remote')
-  script(src='/static/js/remote-package.js')
+  script(src='/js/remote-package.js')
   script.
     ReactDOM.render(React.createElement(Remote, {courseId: #{id}, username: '#{username}'}), document.getElementById('remote'));

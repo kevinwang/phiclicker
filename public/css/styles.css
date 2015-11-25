@@ -88,7 +88,7 @@ body{
   padding-right: 15px;
   padding-bottom: 5px;
   padding-top: 5px;
-  background-image: url("/static/images/q.png");
+  background-image: url("/images/q.png");
   background-size: 30%;
   background-repeat: no-repeat;
 }
