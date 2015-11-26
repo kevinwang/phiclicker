@@ -1,6 +1,7 @@
 var db = require('../models');
 
 var async = require('async');
+var _ = require('underscore');
 
 module.exports = function(app) {
     app.get('/', function(req, res) {
@@ -21,9 +22,9 @@ module.exports = function(app) {
         },
         function(callback) {
             var query = (
-                'SELECT * FROM Registrations, Courses ' +
-                'WHERE Registrations.UserUsername = ? ' +
-                'AND Registrations.CourseId = Courses.id'
+                'SELECT * FROM Courses ' +
+                'LEFT JOIN (SELECT * FROM Registrations WHERE UserUsername = ?) AS r ' +
+                'ON Courses.id = r.CourseId'
             );
             db.sequelize.query(query, {
                 replacements: [req.user.username]
@@ -32,11 +33,16 @@ module.exports = function(app) {
                 callback(null, results);
             });
         }], function(err, results) {
-            console.log(results);
+            allCourses = _.partition(results[1], function(course) {
+                // User is registered for course iff UserUsername is not null
+                return course.UserUsername !== null;
+            });
+
             res.render('home', {
                 user: req.user,
                 coursesTaught: results[0],
-                coursesTaken: results[1]
+                coursesTaken: allCourses[0],
+                coursesAvailable: allCourses[1]
             });
         });
     });

@@ -6,6 +6,7 @@ block content
       .logout
         a(href='/logout') Logout
     .dashboard
+      a(href='/course/new') New course
       if coursesTaught.length > 0
         .roster
           .rosterHeader
@@ -23,3 +24,12 @@ block content
             each course in coursesTaken
               li
                 a(href='/remote/' + course.id)= course.name
+
+      if coursesAvailable.length > 0
+        .roster
+          .rosterHeader
+            h1 Available for Registration
+          ul
+            each course in coursesAvailable
+              li
+                a(href='/course/' + course.id + '/register')= course.name

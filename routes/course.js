@@ -1,6 +1,41 @@
 var db = require('../models');
 
 module.exports = function(app) {
+    app.get('/course/new', function(req, res) {
+        if (!req.isAuthenticated()) return res.redirect('/login');
+        res.render('new-course');
+    });
+
+    app.post('/course', function(req, res) {
+        if (!req.isAuthenticated()) return res.redirect('/login');
+        if (!req.body.code || !req.body.name || !req.body.section) {
+            return res.render('new-course');
+        }
+
+        var now = new Date();
+        var query = (
+            'INSERT INTO Courses (code, name, section, createdAt, updatedAt) ' +
+            'VALUES (?, ?, ?, ?, ?)'
+        );
+        db.sequelize.query(query, {
+            replacements: [req.body.code, req.body.name, req.body.section, now, now]
+        })
+        .spread(function(result, metadata) {
+            var now = new Date();
+            var query = (
+                'INSERT INTO Instructors ' +
+                '(UserUsername, CourseId, createdAt, updatedAt) ' +
+                'VALUES (?, ?, ?, ?)'
+            );
+            db.sequelize.query(query, {
+                replacements: [req.user.username, result.insertId, now, now]
+            })
+            .then(function() {
+                res.redirect('/course/' + result.insertId);
+            });
+        });
+    });
+
     app.get('/course/:id', function(req, res) {
         if (!req.isAuthenticated()) return res.redirect('/login');
         var query = (
@@ -29,6 +64,22 @@ module.exports = function(app) {
                 course: course,
                 questions: questions
             });
+        });
+    });
+
+    app.get('/course/:id/register', function(req, res) {
+        if (!req.isAuthenticated()) return res.redirect('/login');
+        var now = new Date();
+        var query = (
+            'INSERT INTO Registrations ' +
+            '(UserUsername, CourseId, createdAt, updatedAt) ' +
+            'VALUES (?, ?, ?, ?)'
+        );
+        db.sequelize.query(query, {
+            replacements: [req.user.username, req.params.id, now, now]
+        })
+        .then(function() {
+            res.redirect('/remote/' + req.params.id);
         });
     });
 

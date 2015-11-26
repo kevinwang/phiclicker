@@ -1,0 +1,20 @@
+extends ./layout.jade
+
+block content
+  .homeBody
+    .navBar
+      .logout
+        a(href='/logout') Logout
+    .dashboard
+      .roster
+        .rosterHeader
+          h1 New Course
+        .makeQuestion
+          form(name='question', action='/course', method='post')
+            label(for='code') Course code
+            input(type='text', class='form-control', name='code', placeholder='CS 411', autofocus)
+            label(for='name') Course name
+            input(type='text', class='form-control', name='name', placeholder='Database Systems', autofocus)
+            label(for='section') Section
+            input(type='text', class='form-control', name='section', placeholder='Q3', autofocus)
+            input(type='submit', class='btn btn-default', value='Submit')
