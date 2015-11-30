@@ -1,3 +1,5 @@
+var convertMath = require('./convert-math');
+
 /**
  * Multiple choice input method.
  */
@@ -6,6 +8,26 @@ var MultipleChoice = React.createClass({
         choices: React.PropTypes.arrayOf(React.PropTypes.string).isRequired,
         value: React.PropTypes.string,
         handleSubmit: React.PropTypes.func.isRequired
+    },
+
+    latexifyChoices: function() {
+        this.props.choices.forEach(function(choice, index) {
+            if (!choice) return;
+            convertMath(this.refs['choice' + index]);
+        }.bind(this));
+    },
+
+    componentDidMount: function() {
+        this.latexifyChoices();
+    },
+
+    componentDidUpdate: function(prevProps) {
+        for (var i = 0; i < this.props.choices.length; i++) {
+            if (this.props.choices[i] !== prevProps.choices[i]) {
+                this.latexifyChoices();
+                break;
+            }
+        }
     },
 
     render: function() {
@@ -21,7 +43,7 @@ var MultipleChoice = React.createClass({
                     <p>{letter}</p>
                 </div>
                 <div className="textChoice">
-                    <p>{choice}</p>
+                    <p ref={'choice' + index}>{choice}</p>
                 </div>
             </div>;
         }.bind(this));

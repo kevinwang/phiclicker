@@ -1,6 +1,7 @@
 var socket = require('socket.io-client')(':3000/remote');
 
 var MultipleChoice = require('./multiple-choice');
+var convertMath = require('./convert-math');
 
 /**
  * Interface for students to submit responses.
@@ -57,6 +58,12 @@ var Remote = React.createClass({
         }.bind(this));
     },
 
+    componentDidUpdate: function(prevProps, prevState) {
+        if (this.state.questionText !== prevState.questionText) {
+            convertMath(this.refs.questionText);
+        }
+    },
+
     getAnswerInputMethod: function() {
         switch (this.state.questionType) {
             case 'mc':
@@ -80,10 +87,10 @@ var Remote = React.createClass({
     render: function() {
         var questionText = (this.state.questionType === 'disabled' ?
                         'No active question' : this.state.questionText);
-        return <div classNameName="stack">
+        return <div className="stack">
             <div className="bound">
                 <div id="question">
-                    <h2>{questionText}</h2>
+                    <h2 ref="questionText">{questionText}</h2>
                 </div>
                 {this.getAnswerInputMethod()}
             </div>

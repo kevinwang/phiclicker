@@ -205,3 +205,14 @@ li:hover{
   width: 135px;
   margin: auto;
 }
+
+.katex-display {
+    margin: 1em 0;
+    text-align: center;
+}
+
+.katex-display > span {
+    display: inline-block;
+    overflow: hidden;
+    margin: 0 auto;
+}
