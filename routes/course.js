@@ -1,5 +1,7 @@
 var db = require('../models');
 
+var async = require('async');
+
 module.exports = function(app) {
     app.get('/course/new', function(req, res) {
         if (!req.isAuthenticated()) return res.redirect('/login');
@@ -119,9 +121,56 @@ module.exports = function(app) {
         });
     });
 
+    app.get('/course/:courseId/question/:questionId', function(req, res) {
+        if (!req.isAuthenticated()) return res.redirect('/login');
+        async.parallel([
+            function(callback) {
+            var query = (
+                'SELECT * FROM Questions, MultipleChoices ' +
+                'WHERE Questions.id = MultipleChoices.id ' +
+                'AND Questions.id = ? AND Questions.CourseId = ? LIMIT 1'
+            );
+            db.sequelize.query(query, {
+                replacements: [req.params.questionId, req.params.courseId]
+            })
+            .spread(function(results, metadata) {
+                callback(null, results);
+            });
+        }, function(callback) {
+            var query = (
+                'SELECT value, COUNT(*) as count FROM Questions, Responses ' +
+                'WHERE Questions.id = Responses.QuestionId ' +
+                'AND Questions.id = ? ' +
+                'GROUP BY value'
+            );
+            db.sequelize.query(query, {
+                replacements: [req.params.questionId]
+            })
+            .spread(function(results, metadata) {
+                callback(null, results);
+            });
+        }], function(err, results) {
+            console.log(results);
+
+            if (results[0].length === 0) {
+                return res.sendStatus(404);
+            }
+
+            counts = {};
+            results[1].forEach(function(count) {
+                counts[count.value] = count.count;
+            });
+
+            res.render('question', {
+                question: results[0][0],
+                counts: counts
+            });
+        });
+    });
+
     app.get('/course/:courseId/question/:questionId/delete', function(req, res) {
         if (!req.isAuthenticated()) return res.redirect('/login');
-        var query = 'DELETE FROM Questions WHERE id = ? AND Questions.CourseId = ?';
+        var query = 'DELETE FROM Questions WHERE id = ? AND CourseId = ?';
         db.sequelize.query(query, {
             replacements: [req.params.questionId, req.params.courseId]
         })

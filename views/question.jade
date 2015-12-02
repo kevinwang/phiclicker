@@ -1,0 +1,17 @@
+extends ./layout.jade
+
+block content
+  h2= question.text
+  a(href='/course/' + question.CourseId) Back to course
+  h3 Responses
+  ul
+    if question.aText
+      li #{question.aText} (#{counts.A || 0})
+    if question.bText
+      li #{question.bText} (#{counts.B || 0})
+    if question.cText
+      li #{question.cText} (#{counts.C || 0})
+    if question.dText
+      li #{question.dText} (#{counts.D || 0})
+    if question.eText
+      li #{question.eText} (#{counts.E || 0})
