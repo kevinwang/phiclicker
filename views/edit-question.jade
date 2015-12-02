@@ -1,0 +1,26 @@
+extends ./layout.jade
+
+block content
+  .homeBody
+    .navBar
+      .logout
+        a(href='/logout') Logout
+    .dashboard
+      .roster
+        .rosterHeader
+          h1 Edit Question
+        .makeQuestion
+          form(name='question', action='/course/' + question.CourseId + '/question/' + question.id, method='post')
+            label(for='text') Question Text
+            input(type='text', class='form-control', name='text', autofocus, value=question.text)
+            label(for='aText') A
+            input(type='text', class='form-control', name='aText', value=question.aText)
+            label(for='bText') B
+            input(type='text', class='form-control', name='bText', value=question.bText)
+            label(for='cText') C
+            input(type='text', class='form-control', name='cText', value=question.cText)
+            label(for='dText') D
+            input(type='text', class='form-control', name='dText', value=question.dText)
+            label(for='eText') E
+            input(type='text', class='form-control', name='eText', value=question.eText)
+            input(type='submit', class='btn btn-default', value='Submit')

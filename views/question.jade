@@ -2,7 +2,10 @@ extends ./layout.jade
 
 block content
   h2= question.text
-  a(href='/course/' + question.CourseId) Back to course
+  p
+    a(href='/course/' + question.CourseId) Back to course
+  p
+    a(href='/course/' + question.CourseId + '/question/' + question.id + '/edit') Edit
   h3 Responses
   ul
     if question.aText

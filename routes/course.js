@@ -168,6 +168,49 @@ module.exports = function(app) {
         });
     });
 
+    app.get('/course/:courseId/question/:questionId/edit', function(req, res) {
+        var query = (
+            'SELECT * FROM Questions, MultipleChoices ' +
+            'WHERE Questions.id = MultipleChoices.id ' +
+            'AND Questions.id = ? AND Questions.CourseId = ? LIMIT 1'
+        );
+        db.sequelize.query(query, {
+            replacements: [req.params.questionId, req.params.courseId]
+        })
+        .spread(function(results, metadata) {
+            res.render('edit-question', {
+                question: results[0]
+            });
+        });
+    });
+
+    app.post('/course/:courseId/question/:questionId', function(req, res) {
+        var query = (
+            'UPDATE MultipleChoices ' +
+            'SET aText = ?, bText = ?, cText = ?, dText = ?, eText = ? ' +
+            'WHERE id = ?'
+        );
+        db.sequelize.query(query, {
+            replacements: [
+                req.body.aText, req.body.bText, req.body.cText,
+                req.body.dText, req.body.eText, req.params.questionId
+            ]
+        })
+        .then(function() {
+            var query = (
+                'UPDATE Questions SET text = ? WHERE id = ?'
+            );
+            db.sequelize.query(query, {
+                replacements: [
+                    req.body.text, req.params.questionId
+                ]
+            })
+            .then(function() {
+                res.redirect('/course/' + req.params.courseId + '/question/' + req.params.questionId);
+            });
+        });
+    });
+
     app.get('/course/:courseId/question/:questionId/delete', function(req, res) {
         if (!req.isAuthenticated()) return res.redirect('/login');
         var query = 'DELETE FROM Questions WHERE id = ? AND CourseId = ?';
