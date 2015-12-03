@@ -38,11 +38,11 @@ def index(subject):
         return sent_tokenize(sentences)
 
     def answerize(word):
-        synsets = wn.synsets(word, pos='n')
-        if len(synsets) == 0:
+        related = wn.synsets(word, pos='n')
+        if len(related) == 0:
             return []
         else:
-            synset = synsets[0]
+            synset = related[0]
         hypernym = synset.hypernyms()[0]
         hyponyms = hypernym.hyponyms()
         similar_words = []

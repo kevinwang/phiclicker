@@ -17,16 +17,11 @@ block content
           form(name='question', action='/course/' + courseId + '/question', method='post')
             label(for='text') Question Text
             input(type='text', class='form-control', name='text', autofocus)
-            label(for='aText') A
-            input(type='text', class='form-control', name='aText')
-            label(for='bText') B
-            input(type='text', class='form-control', name='bText')
-            label(for='cText') C
-            input(type='text', class='form-control', name='cText')
-            label(for='dText') D
-            input(type='text', class='form-control', name='dText')
-            label(for='eText') E
-            input(type='text', class='form-control', name='eText')
+            input(type='text', class='form-control', name='aText', value = "A")
+            input(type='text', class='form-control', name='bText', value = "B")
+            input(type='text', class='form-control', name='cText', value = "C")
+            input(type='text', class='form-control', name='dText', value = "D")
+            input(type='text', class='form-control', name='eText', value = "E")
             input(type='submit', class='btn btn-default', value='Submit')
           input(type = "submit", id = "generate", class = "btn btn-default", value = "Generate")
         script.
