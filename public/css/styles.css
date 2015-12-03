@@ -219,10 +219,6 @@ li:hover{
   text-align: center;
 }
 
-input{
-  width: 250px;
-}
-
 .questionHeader{
   margin-left: 30px;
 }
@@ -241,15 +237,15 @@ input{
   margin: auto;
 }
 
-.makeQuestion label {
+label {
     display: block;
 }
 
-.makeQuestion input {
+input {
     margin-bottom: 5px;
 }
 
-.makeQuestion input[type="text"] {
+input[type="text"] {
     width: 100%;
 }
 
