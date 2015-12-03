@@ -1,15 +1,19 @@
 extends ./layout.jade
 
 block content
+  .navBar
+    input(type='text', name='search', value = "Look up terms!")
+    input(type = "submit", id = "searchButton", class = "btn btn-default", value = "Search!")
+    .logout
+      a(href='/logout') Logout
+    .createCourse
+      a(href='/course/new') New course
   .homeBody
-    .navBar
-      .logout
-        a(href='/logout') Logout
     .dashboard
       .roster
         .rosterHeader
           h1 New Question
-        .makeQuestion
+        .login
           form(name='question', action='/course/' + courseId + '/question', method='post')
             label(for='text') Question Text
             input(type='text', class='form-control', name='text', autofocus)
@@ -24,7 +28,7 @@ block content
             label(for='eText') E
             input(type='text', class='form-control', name='eText')
             input(type='submit', class='btn btn-default', value='Submit')
-        input(type = "submit", id = "generate", class = "btn btn-default", value = "Generate")
+          input(type = "submit", id = "generate", class = "btn btn-default", value = "Generate")
         script.
           $( "#generate" ).click(function() {
             var query = $("input[name=text]").val();
@@ -39,5 +43,14 @@ block content
               $("input[name=dText]").val(arr[3])
               $("input[name=eText]").val(arr[4])
 
+            });
+          });
+        script.
+          $( "#searchButton" ).click(function() {
+            var query = $("input[name=search]").val();
+            var url = "http://localhost:5000/query/" + query
+            console.log(url)
+            $.get(url, function( data ) {
+              alert(JSON.stringify(data));
             });
           });

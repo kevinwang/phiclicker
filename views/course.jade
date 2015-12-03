@@ -1,10 +1,14 @@
 extends ./layout.jade
 
 block content
+  .navBar
+    .logout
+      a(href='/logout') Logout
+    .createCourse
+      a(href='/course/new') New course
+    .createCourse
+      a(href='/course/' + course.id + '/question/new') New question
   .homeBody
-    .navBar
-      .logout
-        a(href='/logout') Logout
     .dashboard
       .roster
         .rosterHeader
@@ -20,5 +24,3 @@ block content
               li= question.text
                 .delete
                   a(href='/course/' + course.id + '/question/' + question.id + '/delete') Delete
-        .newQuestion
-          a(href='/course/' + course.id + '/question/new') New question

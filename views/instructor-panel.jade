@@ -4,10 +4,21 @@ block head
   script(src='/js/react-package.js')
 
 block content
-  h1= course.name
-  h2 #{course.code} - #{course.section}
-  a(href='/course/' + course.id) Back to course
-  div(id='panel')
-  script(src='/js/instructor-panel-package.js')
-  script.
-    ReactDOM.render(React.createElement(InstructorPanel, {courseId: #{course.id}, questions: !{JSON.stringify(questions)}}), document.getElementById('panel'));
+  .navBar
+    .logout
+      a(href='/logout') Logout
+    .createCourse
+      a(href='/course/new') New course
+    .createCourse
+      a(href='/course/' + course.id + '/question/new') New question
+    .createCourse
+      a(href='/course/' + course.id) Back to course
+  .homeBody
+    .roster
+      .rosterHeader
+        h1= course.name
+        h2 #{course.code} - #{course.section}
+      div(id='panel')
+      script(src='/js/instructor-panel-package.js')
+      script.
+        ReactDOM.render(React.createElement(InstructorPanel, {courseId: #{course.id}, questions: !{JSON.stringify(questions)}}), document.getElementById('panel'));
