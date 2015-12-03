@@ -37,3 +37,20 @@ block content
             input(type='radio', name='correctAnswer', value='')
             span(class='radioLabel') None
             input(type='submit', class='btn btn-default', value='Submit')
+        input(type = "submit", id = "generate", class = "btn btn-default", value = "Generate")
+        script.
+          $( "#generate" ).click(function() {
+            var query = $("input[name=text]").val();
+            var url = "http://localhost:5000/" + query
+            $.get(url, function( data ) {
+              console.log(data[question]);
+              var arr = data['answers']
+              $("input[name=text]").val(data['question'])
+              $("input[name=aText]").val(arr[0])
+              $("input[name=bText]").val(arr[1])
+              $("input[name=cText]").val(arr[2])
+              $("input[name=dText]").val(arr[3])
+              $("input[name=eText]").val(arr[4])
+
+            });
+          });
