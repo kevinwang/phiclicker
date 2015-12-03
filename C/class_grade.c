@@ -9,8 +9,7 @@ int main(int argc, char* argv[]){
 		return 1;
 	}
 	MYSQL* server = mysql_init(NULL);
-	//MYSQL* connect = mysql_real_connect(server, "localhost", (argv[2]), (argv[3]), "phiclicker", (argv[4]), NULL, 0);
-	MYSQL* connect = mysql_real_connect(server, "liquidtungsten.us", (argv[2]), (argv[3]), "phiclicker", atoi(argv[4]), NULL, 0);
+	MYSQL* connect = mysql_real_connect(server, "localhost", (argv[2]), (argv[3]), "phiclicker", (argv[4]), NULL, 0);
 	if(connect == NULL){puts("failure: connection_failed"); return 1;}//connect is used only for this test
 	//else puts("connection to server sucessful");
 	
