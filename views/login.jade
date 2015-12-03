@@ -1,15 +1,15 @@
 extends ./layout.jade
 
 block content
+  .navBar
+    .logout
+      a(href='/signup') Sign up
   .homeBody
     .roster
       .rosterHeader
         h1 Login
       .login
         form(name='login', action='/login', method='post')
-          label(for='username') Username
-          input(type='text', class='form-control', name='username', autofocus)
-          label(for='password') Password
-          input(type='password', class='form-control', name='password')
-          input(type='submit', class='btn btn-default', value='Login')
-        a(href='/signup') Sign up
+          input(type='text', class='form-control', name='username', autofocus, value = "Username")
+          input(type='password', class='form-control', name='password' value = "Password")
+          input(type='submit', class='loginButton loginText', value='Login')

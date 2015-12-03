@@ -1,16 +1,17 @@
 extends ./layout.jade
 
 block content
-  .homeBody
-    .navBar
-      .logout
-        a(href='/logout') Logout
-    .dashboard
+  .navBar
+    .logout
+      a(href='/logout') Logout
+    .createCourse
       a(href='/course/new') New course
+  .homeBody
+    .dashboard
       if coursesTaught.length > 0
         .roster
           .rosterHeader
-            h1 Courses you teach
+            h1 Courses You Teach
           ul
             each course in coursesTaught
               li
