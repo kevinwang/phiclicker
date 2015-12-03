@@ -202,8 +202,24 @@ li:hover{
 }
 
 .makeQuestion{
-  width: 135px;
+  width: 250px;
   margin: auto;
+}
+
+.makeQuestion label {
+    display: block;
+}
+
+.makeQuestion input {
+    margin-bottom: 5px;
+}
+
+.makeQuestion input[type="text"] {
+    width: 100%;
+}
+
+.radioLabel {
+    padding-right: 5px;
 }
 
 .katex-display {

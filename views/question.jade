@@ -9,12 +9,12 @@ block content
   h3 Responses
   ul
     if question.aText
-      li #{question.aText} (#{counts.A || 0})
+      li #{question.aText} (#{counts.A || 0}) #{question.correctAnswer === 'A' ? '(correct answer)' : ''}
     if question.bText
-      li #{question.bText} (#{counts.B || 0})
+      li #{question.bText} (#{counts.B || 0}) #{question.correctAnswer === 'B' ? '(correct answer)' : ''}
     if question.cText
-      li #{question.cText} (#{counts.C || 0})
+      li #{question.cText} (#{counts.C || 0}) #{question.correctAnswer === 'C' ? '(correct answer)' : ''}
     if question.dText
-      li #{question.dText} (#{counts.D || 0})
+      li #{question.dText} (#{counts.D || 0}) #{question.correctAnswer === 'D' ? '(correct answer)' : ''}
     if question.eText
-      li #{question.eText} (#{counts.E || 0})
+      li #{question.eText} (#{counts.E || 0}) #{question.correctAnswer === 'E' ? '(correct answer)' : ''}

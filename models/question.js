@@ -7,7 +7,8 @@ module.exports = function(sequelize, DataTypes) {
         type: {
             type: DataTypes.ENUM('mc'),
             allowNull: false
-        }
+        },
+        correctAnswer: DataTypes.STRING
     }, {
         classMethods: {
             associate: function(models) {

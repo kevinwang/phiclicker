@@ -96,11 +96,11 @@ module.exports = function(app) {
         if (!req.isAuthenticated()) return res.redirect('/login');
         var now = new Date();
         var query = (
-            'INSERT INTO Questions (text, type, createdAt, updatedAt, CourseId) ' +
-            'VALUES (?, ?, ?, ?, ?)'
+            'INSERT INTO Questions (text, type, correctAnswer, createdAt, updatedAt, CourseId) ' +
+            'VALUES (?, ?, ?, ?, ?, ?)'
         );
         db.sequelize.query(query, {
-            replacements: [req.body.text, 'mc', now, now, req.params.id]
+            replacements: [req.body.text, 'mc', req.body.correctAnswer, now, now, req.params.id]
         })
         .spread(function(results, metadata) {
             var questionId = results.insertId;
@@ -178,6 +178,7 @@ module.exports = function(app) {
             replacements: [req.params.questionId, req.params.courseId]
         })
         .spread(function(results, metadata) {
+            console.log(results[0]);
             res.render('edit-question', {
                 question: results[0]
             });
@@ -198,11 +199,11 @@ module.exports = function(app) {
         })
         .then(function() {
             var query = (
-                'UPDATE Questions SET text = ? WHERE id = ?'
+                'UPDATE Questions SET text = ?, correctAnswer = ? WHERE id = ?'
             );
             db.sequelize.query(query, {
                 replacements: [
-                    req.body.text, req.params.questionId
+                    req.body.text, req.body.correctAnswer, req.params.questionId
                 ]
             })
             .then(function() {

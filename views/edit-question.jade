@@ -23,4 +23,17 @@ block content
             input(type='text', class='form-control', name='dText', value=question.dText)
             label(for='eText') E
             input(type='text', class='form-control', name='eText', value=question.eText)
+            label(for='correctAnswer') Correct answer
+            input(type='radio', name='correctAnswer', value='A', checked=question.correctAnswer === 'A')
+            span(class='radioLabel') A
+            input(type='radio', name='correctAnswer', value='B', checked=question.correctAnswer === 'B')
+            span(class='radioLabel') B
+            input(type='radio', name='correctAnswer', value='C', checked=question.correctAnswer === 'C')
+            span(class='radioLabel') C
+            input(type='radio', name='correctAnswer', value='D', checked=question.correctAnswer === 'D')
+            span(class='radioLabel') D
+            input(type='radio', name='correctAnswer', value='E', checked=question.correctAnswer === 'E')
+            span(class='radioLabel') E
+            input(type='radio', name='correctAnswer', value='', checked=question.correctAnswer === '' || !question.correctAnswer)
+            span(class='radioLabel') None
             input(type='submit', class='btn btn-default', value='Submit')
